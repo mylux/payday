@@ -24,3 +24,6 @@ hs_err_pid*
 
 #Compiled classes
 target/
+payday-main/target
+payday-gateways/target
+payday-core/target
