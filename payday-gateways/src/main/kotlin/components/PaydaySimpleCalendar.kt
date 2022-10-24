@@ -6,8 +6,6 @@ import java.util.*
 
 @Component
 class PaydaySimpleCalendar : SimpleCalendar {
-    private val calendar: Calendar = Calendar.getInstance()
-
     override fun year(date: Date): Int {
         return genCalDatePart(date, Calendar.YEAR)
     }
@@ -25,6 +23,7 @@ class PaydaySimpleCalendar : SimpleCalendar {
     }
 
     override fun date(year: Int, month: Int, day: Int): Date {
+        val calendar: Calendar = Calendar.getInstance()
         calendar[Calendar.YEAR] = year
         calendar[Calendar.MONTH] = month-1
         calendar[Calendar.DATE] = day
@@ -51,12 +50,14 @@ class PaydaySimpleCalendar : SimpleCalendar {
     }
 
     private fun add(date: Date, what: Int, howMany: Int): Date {
+        val calendar: Calendar = Calendar.getInstance()
         calendar.time = date
         calendar.add(what, howMany)
         return calendar.time
     }
 
     private fun genCalDatePart(date: Date, part: Int): Int{
+        val calendar: Calendar = Calendar.getInstance()
         calendar.time = date
         return calendar[part]
     }
