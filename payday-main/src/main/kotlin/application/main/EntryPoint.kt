@@ -1,7 +1,6 @@
 package application.main
 
 import application.communication.cli.CliArgs
-import entities.Output
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan
@@ -20,6 +19,10 @@ class EntryPoint {
     private val context: AnnotationConfigApplicationContext = AnnotationConfigApplicationContext()
     fun cli(args: Array<String>){
         val parsedArguments: Map<String, String> = CliArgs.parse(args)
+        context.registerBean(
+            Operation::class.java,
+            Supplier {Operation.getByOperationName(parsedArguments["operation"]!!)}
+        )
         context.registerBean("applicationArgs", Map::class.java, Supplier { parsedArguments })
         context.register(EntryPoint::class.java)
         context.registerBean(OutputProvider::class.java, Supplier { StdoutOutputProvider() })
@@ -27,16 +30,17 @@ class EntryPoint {
         context.getBean("selectedUsecase", Usecase::class.java).run(parsedArguments)
     }
 
-    fun apiTodayPreLoad(){
+    fun apiPreLoad(operation: Operation){
         context.register(EntryPoint::class.java)
+        context.registerBean(
+            Operation::class.java,
+            Supplier {operation}
+        )
         context.registerBean(OutputProvider::class.java, Supplier{ReturnOutputProvider()})
+        context.refresh()
     }
 
     fun apiToday(args: Map<String, String>): Boolean{
-        val parsedArguments = args + mapOf("operation" to "is-today-nth-business-day")
-        context.registerBean("applicationArgs", Map::class.java, Supplier { parsedArguments })
-        context.refresh()
-        println("Will run")
-        return context.getBean(IsTodayNthBusinessDay::class.java).run(parsedArguments).value as Boolean
+        return context.getBean(IsTodayNthBusinessDay::class.java).run(args).value as Boolean
     }
 }

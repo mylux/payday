@@ -8,11 +8,10 @@ import java.util.*
 
 @Component
 class BusinessDayIdentifier(
-    private val country: Country,
     private val repository: HolidayRepository,
     private val cal: SimpleCalendar
 ) {
-    fun identifyBusinessDay(baseDate: Date): Int {
+    fun identifyBusinessDay(country: Country, baseDate: Date): Int {
         val weekendDays: List<Int> = listOf(1, 7)
         val holidays: List<Date> = repository.getFrom(country, baseDate)
         var businessDay = 0

@@ -3,6 +3,7 @@ package application.communication.rpc
 import application.main.EntryPoint
 import io.grpc.Server
 import io.grpc.ServerBuilder
+import usecases.enums.Operation
 
 class KedaServer(
     val port: Int,
@@ -10,7 +11,7 @@ class KedaServer(
     val server: Server = ServerBuilder.forPort(port).addService(ExternalScalerService(entrypoint)).build(),
 ) {
     fun start() {
-        entrypoint.apiTodayPreLoad()
+        entrypoint.apiPreLoad(Operation.IS_TODAY_NTH_BUSINESS_DAY)
         server.start()
         println("Server Running on port ${port}")
         Runtime.getRuntime().addShutdownHook(
@@ -34,8 +35,7 @@ class KedaServer(
         override suspend fun isActive(
             request: ExternalScalerOuterClass.ScaledObjectRef
         ): ExternalScalerOuterClass.IsActiveResponse{
-            println("Will do")
-            return ExternalScalerOuterClass.IsActiveResponse.newBuilder().apply {
+            val r: ExternalScalerOuterClass.IsActiveResponse = ExternalScalerOuterClass.IsActiveResponse.newBuilder().apply {
                 result = entrypoint.apiToday(
                     mapOf(
                         "country" to request.scalerMetadataMap["country"]!!,
@@ -43,8 +43,8 @@ class KedaServer(
                         "timezone" to request.scalerMetadataMap["timezone"]!!,
                     )
                 )
-                //result = true
             }.build()
+            return r
         }
     }
 }
