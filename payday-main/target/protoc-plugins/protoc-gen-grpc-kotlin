@@ -1,8 +1,8 @@
 #!/bin/sh
 
-CP="/home/lux/.m2/repository/io/grpc/protoc-gen-grpc-kotlin/1.3.0/protoc-gen-grpc-kotlin-1.3.0-jdk8.jar"
+CP="/Users/luan.andrade/.m2/repository/io/grpc/protoc-gen-grpc-kotlin/1.3.0/protoc-gen-grpc-kotlin-1.3.0-jdk8.jar"
 ARGS=""
 JVMARGS=""
 
-"/usr/lib/jvm/java-19-openjdk/bin/java" $JVMARGS -cp $CP io.grpc.kotlin.generator.GeneratorRunner $ARGS
+"/Users/luan.andrade/Library/Java/JavaVirtualMachines/openjdk-19.0.1/Contents/Home/bin/java" $JVMARGS -cp $CP io.grpc.kotlin.generator.GeneratorRunner $ARGS
 

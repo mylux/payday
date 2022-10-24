@@ -15,13 +15,9 @@ import usecases.enums.Operation
 
 @Configuration
 class ApplicationConfiguration {
-    @Bean
-    fun operation(@Qualifier("applicationArgs") parsedArgs: Map<String, String>) =
-        Operation.getByOperationName(parsedArgs["operation"]!!)
-
-    @Bean
-    fun country(@Qualifier("applicationArgs") parsedArgs: Map<String, String>) =
-        Country.getByCountryCode(parsedArgs["country"]!!)
+    //@Bean
+    /*fun country(@Qualifier("applicationArgs") parsedArgs: Map<String, String>) =
+        Country.getByCountryCode(parsedArgs["country"]!!)*/
 
     @Bean("selectedUsecase")
     fun useCase(
